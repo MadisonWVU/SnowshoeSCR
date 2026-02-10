@@ -555,6 +555,7 @@ fit <- parLapply(cl = this_cluster, X = 1:3, fun = run_MCMC_allcode,
 stopCluster(this_cluster)
 
 #fit the model in single
+library(pbapply)
 fit <- pblapply(1:3, function(i) {
   run_MCMC_allcode(
     data = Data,
@@ -621,3 +622,4 @@ write.csv(
                fit[[2]]$samples,
                fit[[3]]$samples))[, c('sigma', 'lam_0', 'D_mi2', 'bp', 'psi')],
   'USCR-Posterior.csv', row.names = F)
+
