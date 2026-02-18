@@ -117,10 +117,8 @@ code <- nimbleCode({
       }
       
       #constraint to keep activity centers within buffer of state space
-      for(j in 1:J[s]){
-        is_close[s,i,j] <- step(buffer[s] - sqrt(dist2[s,i,j]))
-      }
-      in_ss[s,i] <- max(is_close[s,i,1:J[s]])
+      in_ss[s,i] <- step(buffer[s] - min(sqrt(dist2[s,i,1:J[s]])))
+      
     }
     
     #count model for cameras in each site
@@ -275,9 +273,9 @@ fit <- parLapply(cl = this_cluster, X = 1:chains, fun = run_MCMC_allcode,
                  constants = Const,
                  code = code,
                  inits = inits,
-                 niter = 44000,
+                 niter = 50000,
                  nburnin = 1000,
-                 thin = 200,
+                 thin = 100,
                  monitors = c('log_sigma', 'log_lam_0', 'psi', 'sd_eps',
                               'sigma', 'lam_0', 'N',
                               'sum_obs', 'sum_sim', 'bp',
